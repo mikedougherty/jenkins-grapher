@@ -40,7 +40,6 @@ Or use the Docker image:
 ```bash
 $ docker run \
     --rm \
-    -it \
     -e OUTPUT_FORMAT= \
     -e JENKINS_USER=UserWithExtendedReadPermissions \
     -e JENKINS_TOKEN=deadbeef \
