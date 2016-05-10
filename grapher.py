@@ -145,7 +145,6 @@ def main(root_url, view_name='All'):
     print >>dot, "  subgraph orphans {"
     for orphan in sorted(orphans):
         if orphan not in all_jobs:
-            print >>sys.stderr, "Filtering container {}".format(orphan)
             continue
         print >>dot, '    {orphan};'.format(orphan=dot_string_escape(job_url_to_name(root_url, orphan)))
     print >>dot, '    label = "orphans";'
@@ -154,7 +153,6 @@ def main(root_url, view_name='All'):
     for name, downstreams in sorted(downstream.items()):
         for d in sorted(downstreams):
             if d not in all_jobs:
-                print >>sys.stderr, "Filtering container {}".format(d)
                 continue
             print >>dot, '  {upstream} -> {downstream};'.format(
                 upstream=dot_string_escape(job_url_to_name(root_url, name)),

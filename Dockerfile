@@ -5,7 +5,7 @@ WORKDIR /src
 VOLUME /output
 ENV LC_ALL=C
 ENV OUTPUT_DIR /output
-ENV OUTPUT_FORMAT png
+ENV OUTPUT_FORMAT dot
 ENTRYPOINT ["/src/entrypoint.sh"]
 
 RUN apk add --update \
