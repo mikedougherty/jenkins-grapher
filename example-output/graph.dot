@@ -1,0 +1,16 @@
+digraph "DTR" {
+  "dtr-1.4" -> "dtr";
+  "dtr-2.0" -> "dtr";
+  "dtr-integration-matrix" -> "dtr-integration";
+  "dtr-integration" -> "docker-install";
+  "dtr-integration" -> "docker-machine-create";
+  "dtr-integration" -> "docker-machine-rm";
+  "dtr-integration" -> "dtr-deploy";
+  "dtr-integration" -> "dtr-test-integration";
+  "dtr-master" -> "dtr";
+  "dtr-nightly" -> "dtr";
+  "dtr-pr" -> "dtr";
+  "dtr" -> "dtr-build-images";
+  "dtr" -> "dtr-integration";
+}
+
