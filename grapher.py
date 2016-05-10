@@ -63,9 +63,7 @@ def jenkins_auth():
 def filter_directories(jobs):
     filtered = set()
     for job in list(jobs):
-        prefix = job
-        if not prefix.endswith('/'):
-            prefix += '/'
+        prefix = append_slash(job)
 
         if not any(x != job and x.startswith(prefix) for x in jobs):
             filtered.add(job)
@@ -79,8 +77,15 @@ def job_url_to_name(base_url, url):
     return '/'.join(filter(None, map(urllib.unquote, url.split('/')))[1::2])
 
 
+def append_slash(url):
+    if not url.endswith('/'):
+        url += '/'
+    return url
+
+
 def job_name_to_url(base_url, name):
-    return '/job/'.join([base_url] + filter(None, map(urllib.quote, name.split('/'))))
+    url = '/job/'.join([base_url] + filter(None, map(urllib.quote, name.split('/'))))
+    return append_slash(url)
 
 
 def dot_string_escape(s):
@@ -89,7 +94,7 @@ def dot_string_escape(s):
 
 def collect_jobs_from_view(view):
     for job in view.get('jobs', []):
-        yield job['url']
+        yield append_slash(job['url'])
         # yield 'view/{view_name}/job/{job_name}'.format(
         #     view_name=view['name'], job_name=job['name']
         # )
@@ -142,16 +147,17 @@ def main(root_url, view_name='All'):
 
     dot = io.BytesIO()
     print >>dot, 'digraph {view} {{'.format(view=dot_string_escape(view_name))
-    print >>dot, "  subgraph orphans {"
-    for orphan in sorted(orphans):
-        if orphan not in all_jobs:
-            continue
-        print >>dot, '    {orphan};'.format(orphan=dot_string_escape(job_url_to_name(root_url, orphan)))
-    print >>dot, '    label = "orphans";'
-    print >>dot, '  }'
+    if orphans:
+        print >>dot, "  subgraph orphans {"
+        for orphan in sorted(orphans):
+            if orphan not in all_jobs:
+                continue
+            print >>dot, '    {orphan};'.format(orphan=dot_string_escape(job_url_to_name(root_url, orphan)))
+        print >>dot, '    label = "orphans";'
+        print >>dot, '  }'
 
     for name, downstreams in sorted(downstream.items()):
-        for d in sorted(downstreams):
+        for d in sorted(set(downstreams)):
             if d not in all_jobs:
                 continue
             print >>dot, '  {upstream} -> {downstream};'.format(
