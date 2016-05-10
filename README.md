@@ -69,3 +69,8 @@ Output:
 - Creates files `graph.dot` and `graph.png`
 - If `OUTPUT_FORMAT` is not empty, outputs the contents of `graph.$OUTPUT_FORMAT` to stdout
 - stderr displays progress
+
+Example output
+--------------
+![Project view](../../raw/master/example-output/graph.png)
+See [graphviz source](../../blob/master/example-output/graph.dot)
