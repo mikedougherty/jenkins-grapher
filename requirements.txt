@@ -1,0 +1,4 @@
+requests
+slumber
+pyyaml
+lxml
